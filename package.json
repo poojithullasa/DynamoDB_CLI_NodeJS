@@ -1,0 +1,23 @@
+{
+  "name": "dracarys-cli",
+  "version": "1.0.0",
+  "description": "CLI tool for Library Book Management",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Ullasa Poojith Sindhur",
+  "license": "ISC",
+  "bin": {
+    "dracarys": "./bin/index.js"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.995.0",
+    "axios": "^0.21.4",
+    "commander": "^8.2.0",
+    "express": "^4.17.1",
+    "inquirer": "^8.1.5"
+  }
+}

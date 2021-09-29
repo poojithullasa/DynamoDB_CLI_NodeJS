@@ -17,11 +17,11 @@ exports.addItem = (request, response) => {
   const params = {
     TableName: table,
     Item: {
-      year: year,
-      title: title,
+      year: Number(request.params.year),
+      title: request.params.title,
       info: {
-        plot: "Nothing happens at all.",
-        rating: 0,
+        plot: request.params.plot,
+        rating: Number(request.params.rating),
       },
     },
   };
@@ -48,8 +48,8 @@ exports.removeItem = (request, response) => {
   const params = {
     TableName: table,
     Key: {
-      title: title,
-      year: year,
+      year: Number(request.params.year),
+      title: request.params.title,
     },
   };
   docClient.delete(params, (error, data) => {
@@ -75,8 +75,8 @@ exports.readItem = (request, response) => {
   const params = {
     TableName: table,
     Key: {
-      year: year,
-      title: title,
+      year: Number(request.params.year),
+      title: request.params.title,
     },
   };
   docClient.get(params, (error, data) => {
@@ -102,14 +102,14 @@ exports.updateItem = (request, response) => {
   const params = {
     TableName: table,
     Key: {
-      year: year,
-      title: title,
+      year: Number(request.params.year),
+      title: request.params.title,
     },
     UpdateExpression: "set info.rating = :r, info.plot=:p, info.actors=:a",
     ExpressionAttributeValues: {
-      ":r": 5.5,
-      ":p": "Everything happens all at once.",
-      ":a": ["Larry", "Moe", "Curly"],
+      ":r": Number(request.params.rating),
+      ":p": request.params.plot,
+      ":a": request.params.actors.split(", "),
     },
     ReturnValues: "UPDATED_NEW",
   };
@@ -141,7 +141,7 @@ exports.containsKey = (request, response) => {
       "#title": "title",
     },
     ExpressionAttributeValues: {
-      ":string": "The Big",
+      ":string": request.params.string,
     },
   };
   docClient.scan(params, (error, data) => {
@@ -172,8 +172,8 @@ exports.startsWith = (request, response) => {
       "#yr": "year",
     },
     ExpressionAttributeValues: {
-      ":yyyy": 1992,
-      ":string": "A",
+      ":yyyy": Number(request.params.number),
+      ":string": request.params.string,
     },
   };
   docClient.query(params, (error, data) => {
@@ -181,14 +181,14 @@ exports.startsWith = (request, response) => {
       response.send(
         messages.errorResponse(
           error,
-          `Sorry, Unable to scan starts-with ${params.ExpressionAttributeValues[":string"]} in the table ${params.TableName}`
+          `Sorry, Unable to scan starts-with ${params.ExpressionAttributeValues[":string"]} in the table ${params.TableName} for the year ${params.ExpressionAttributeValues[":yyyy"]}`
         )
       );
     } else {
       response.send(
         messages.dataResponse(
           data,
-          `Successfully scanned, starts-with ${params.ExpressionAttributeValues[":string"]} in the table ${params.TableName}`
+          `Successfully scanned, starts-with ${params.ExpressionAttributeValues[":string"]} in the table ${params.TableName} for the year ${params.ExpressionAttributeValues[":yyyy"]}`
         )
       );
     }
@@ -203,7 +203,7 @@ exports.equals = (request, response) => {
       "#yr": "year",
     },
     ExpressionAttributeValues: {
-      ":yyyy": 1985,
+      ":yyyy": Number(request.params.year),
     },
   };
   docClient.query(params, (error, data) => {

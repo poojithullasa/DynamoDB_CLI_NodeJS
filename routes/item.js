@@ -2,12 +2,15 @@ const express = require("express");
 const itemController = require("../controllers/item");
 const router = express.Router();
 
-router.post("/add", itemController.addItem);
-router.delete("/remove", itemController.removeItem);
-router.get("/read", itemController.readItem);
-router.patch("/update", itemController.updateItem);
-router.get("/contains", itemController.containsKey);
-router.get("/starts", itemController.startsWith);
-router.get("/equals", itemController.equals);
+router.post("/add/:year&:title&:plot&:rating", itemController.addItem);
+router.delete("/remove/:year&:title", itemController.removeItem);
+router.get("/read/:year&:title", itemController.readItem);
+router.patch(
+  "/update/:year&:title&:plot&:rating&:actors",
+  itemController.updateItem
+);
+router.get("/contains/:string", itemController.containsKey);
+router.get("/starts/:string&:number", itemController.startsWith);
+router.get("/equals/:year", itemController.equals);
 
 module.exports = router;

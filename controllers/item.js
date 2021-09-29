@@ -27,18 +27,13 @@ exports.addItem = (request, response) => {
   };
   docClient.put(params, (error, data) => {
     if (error) {
-      response.send(
-        messages.errorResponse(
-          error,
-          `Sorry, Unable to add item in table ${params.TableName}`
-        )
-      );
+      response.send(messages.errorResponse(error));
     } else {
       response.send(
-        messages.dataResponse(
-          params.Item,
-          `Successfully added item in table ${params.TableName}`
-        )
+        messages.dataResponse({
+          message: "Successfully Added Item",
+          Details: params,
+        })
       );
     }
   });
@@ -54,18 +49,13 @@ exports.removeItem = (request, response) => {
   };
   docClient.delete(params, (error, data) => {
     if (error) {
-      response.send(
-        messages.errorResponse(
-          error,
-          `Sorry, Unable to remove item in table ${params.TableName}`
-        )
-      );
+      response.send(messages.errorResponse(error));
     } else {
       response.send(
-        messages.dataResponse(
-          params.Key,
-          `Successfully removed item in table ${params.TableName}`
-        )
+        messages.dataResponse({
+          message: "Successfully Deleted Item",
+          Details: params,
+        })
       );
     }
   });
@@ -81,19 +71,9 @@ exports.readItem = (request, response) => {
   };
   docClient.get(params, (error, data) => {
     if (error) {
-      response.send(
-        messages.errorResponse(
-          error,
-          `Sorry, Unable to read item in table ${params.TableName}`
-        )
-      );
+      response.send(messages.errorResponse(error));
     } else {
-      response.send(
-        messages.dataResponse(
-          data,
-          `Successfully read item in table ${params.TableName}`
-        )
-      );
+      response.send(messages.dataResponse(data));
     }
   });
 };
@@ -115,19 +95,9 @@ exports.updateItem = (request, response) => {
   };
   docClient.update(params, (error, data) => {
     if (error) {
-      response.send(
-        messages.errorResponse(
-          error,
-          `Sorry, Unable to update item in table ${params.TableName}`
-        )
-      );
+      response.send(messages.errorResponse(error));
     } else {
-      response.send(
-        messages.dataResponse(
-          data,
-          `Successfully updated item in table ${params.TableName}`
-        )
-      );
+      response.send(messages.dataResponse(data));
     }
   });
 };
@@ -146,19 +116,9 @@ exports.containsKey = (request, response) => {
   };
   docClient.scan(params, (error, data) => {
     if (error) {
-      response.send(
-        messages.errorResponse(
-          error,
-          `Sorry, Unable to Query Contains ${params.ExpressionAttributeValues[":string"]} in the table ${params.TableName}`
-        )
-      );
+      response.send(messages.errorResponse(error));
     } else {
-      response.send(
-        messages.dataResponse(
-          data,
-          `Successfully Queried Contains ${params.ExpressionAttributeValues[":string"]} in the table ${params.TableName}`
-        )
-      );
+      response.send(messages.dataResponse(data));
     }
   });
 };
@@ -178,19 +138,9 @@ exports.startsWith = (request, response) => {
   };
   docClient.query(params, (error, data) => {
     if (error) {
-      response.send(
-        messages.errorResponse(
-          error,
-          `Sorry, Unable to scan starts-with ${params.ExpressionAttributeValues[":string"]} in the table ${params.TableName} for the year ${params.ExpressionAttributeValues[":yyyy"]}`
-        )
-      );
+      response.send(messages.errorResponse(error));
     } else {
-      response.send(
-        messages.dataResponse(
-          data,
-          `Successfully scanned, starts-with ${params.ExpressionAttributeValues[":string"]} in the table ${params.TableName} for the year ${params.ExpressionAttributeValues[":yyyy"]}`
-        )
-      );
+      response.send(messages.dataResponse(data));
     }
   });
 };
@@ -208,19 +158,9 @@ exports.equals = (request, response) => {
   };
   docClient.query(params, (error, data) => {
     if (error) {
-      response.send(
-        messages.errorResponse(
-          error,
-          `Sorry, Unable to query equals ${params.ExpressionAttributeValues[":yyyy"]} in the table ${params.TableName}`
-        )
-      );
+      response.send(messages.errorResponse(error));
     } else {
-      response.send(
-        messages.dataResponse(
-          data,
-          `Successfully queried equals ${params.ExpressionAttributeValues[":yyyy"]} in the table ${params.TableName}`
-        )
-      );
+      response.send(messages.dataResponse(data));
     }
   });
 };

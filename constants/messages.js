@@ -1,9 +1,9 @@
-exports.errorResponse = (error, message) => {
-  return `{Status: '${message}',Error: ${JSON.stringify(error, null, 2)}}`;
+exports.errorResponse = (error) => {
+  return `${JSON.stringify(error, null, 2)}`;
 };
 
-exports.dataResponse = (data, message) => {
-  return `{Status: '${message}', Data: ${JSON.stringify(data, null, 2)}}`;
+exports.dataResponse = (data) => {
+  return `${JSON.stringify(data, null, 2)}`;
 };
 
 exports.errorOutput = (options) => {

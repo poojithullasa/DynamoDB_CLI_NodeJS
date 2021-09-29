@@ -110,3 +110,12 @@ program.option("-D, --debug", "See the Responses in Debug Mode");
 program.parse(process.argv);
 
 const options = program.opts();
+
+//Output Messages
+exports.successMessage = (response) => {
+  console.log(response);
+};
+
+exports.errorMessage = (error) => {
+  console.log(error);
+};

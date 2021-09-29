@@ -29,19 +29,9 @@ exports.createTable = (request, response) => {
 
   dynamodb.createTable(params, (error, data) => {
     if (error) {
-      response.send(
-        messages.errorResponse(
-          error,
-          `Sorry, Unable to Create table ${params.TableName}`
-        )
-      );
+      response.send(messages.errorResponse(error));
     } else {
-      response.send(
-        messages.dataResponse(
-          data,
-          `Successfully Created table ${params.TableName}`
-        )
-      );
+      response.send(messages.dataResponse(data));
     }
   });
 };
@@ -52,19 +42,9 @@ exports.deleteTable = (request, response) => {
   };
   dynamodb.deleteTable(params, (error, data) => {
     if (error) {
-      response.send(
-        messages.errorResponse(
-          error,
-          `Sorry, Unable to delete table ${params.TableName}`
-        )
-      );
+      response.send(messages.errorResponse(error));
     } else {
-      response.send(
-        messages.dataResponse(
-          data,
-          `Successfully deleted table ${params.TableName}`
-        )
-      );
+      response.send(messages.dataResponse(data));
     }
   });
 };
@@ -82,14 +62,13 @@ exports.loadTable = (request, response) => {
     };
     docClient.put(params, (error, data) => {
       if (error) {
-        response.send(
-          messages.errorResponse(
-            error,
-            `Sorry, Cannot add Items in the table ${params.TableName}`
-          )
-        );
+        response.send(messages.errorResponse(error));
       }
     });
   });
-  response.send(messages.dataResponse(dataItems, `Successfully Added Items`));
+  response.send(
+    messages.dataResponse({
+      message: "Successfully added items into the table",
+    })
+  );
 };

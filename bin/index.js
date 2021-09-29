@@ -114,11 +114,19 @@ const options = program.opts();
 
 //Output Messages
 exports.successMessage = (response) => {
-  console.log(response.data);
+  if (options.debug) {
+    console.log(response);
+  } else {
+    console.log(response.data);
+  }
 };
 
 exports.errorMessage = (error) => {
-  console.log(error);
+  if (options.debug) {
+    console.log(error);
+  } else {
+    console.log(error);
+  }
 };
 
 //  table.push(response);

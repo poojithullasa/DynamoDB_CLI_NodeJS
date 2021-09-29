@@ -29,9 +29,23 @@ exports.createTable = (request, response) => {
 
   dynamodb.createTable(params, (error, data) => {
     if (error) {
-      response.send(messages.errorResponse(error));
+      response.send(
+        messages.errorResponse({
+          route: "/table/create",
+          message: "Sorry, Cannot Create Table",
+          details: params,
+          error: error,
+        })
+      );
     } else {
-      response.send(messages.dataResponse(data));
+      response.send(
+        messages.dataResponse({
+          route: "/table/create",
+          message: "Successfully Created Table",
+          details: params,
+          data: data,
+        })
+      );
     }
   });
 };
@@ -42,9 +56,23 @@ exports.deleteTable = (request, response) => {
   };
   dynamodb.deleteTable(params, (error, data) => {
     if (error) {
-      response.send(messages.errorResponse(error));
+      response.send(
+        messages.errorResponse({
+          route: "/table/delete",
+          message: "Sorry, Cannot Delete Table",
+          details: params,
+          error: error,
+        })
+      );
     } else {
-      response.send(messages.dataResponse(data));
+      response.send(
+        messages.dataResponse({
+          route: "/table/delete",
+          message: "Successfully Deleted Table",
+          details: params,
+          data: data,
+        })
+      );
     }
   });
 };
@@ -62,13 +90,23 @@ exports.loadTable = (request, response) => {
     };
     docClient.put(params, (error, data) => {
       if (error) {
-        response.send(messages.errorResponse(error));
+        response.send(
+          messages.errorResponse({
+            route: "/table/load",
+            message: "Sorry, Cannot Add Sample Data to the Table",
+            details: params,
+            error: error,
+          })
+        );
       }
     });
   });
   response.send(
     messages.dataResponse({
-      message: "Successfully added items into the table",
+      route: "/table/load",
+      message: "Successfully Loaded Table with Sample Data",
+      details: "Loaded Sample data from moviesdata.json file in root folder",
+      data: dataItems,
     })
   );
 };

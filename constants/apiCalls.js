@@ -1,4 +1,5 @@
 const { default: axios } = require("axios");
+const index = require("../bin/index");
 
 exports.apiCall = (method, url) => {
   axios({
@@ -7,9 +8,9 @@ exports.apiCall = (method, url) => {
     url: url,
   })
     .then(function (response) {
-      console.log(response.data);
+      index.successMessage(response);
     })
     .catch(function (error) {
-      console.log(error);
+      index.errorMessage(error);
     });
 };

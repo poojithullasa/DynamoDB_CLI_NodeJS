@@ -1,10 +1,11 @@
 #! /usr/bin/env node
 const { Command } = require("commander");
-const inquirer = require("inquirer");
 const program = new Command();
-
+const inquirer = require("inquirer");
 const { apiCall } = require("../constants/apiCalls");
 const { errorOutput } = require("../constants/messages");
+const Table = require("cli-table");
+const table = new Table();
 const { inputData } = require("../constants/input");
 
 //version
@@ -113,9 +114,12 @@ const options = program.opts();
 
 //Output Messages
 exports.successMessage = (response) => {
-  console.log(response);
+  console.log(response.data);
 };
 
 exports.errorMessage = (error) => {
   console.log(error);
 };
+
+//  table.push(response);
+// console.log(table.toString());

@@ -27,12 +27,21 @@ exports.addItem = (request, response) => {
   };
   docClient.put(params, (error, data) => {
     if (error) {
-      response.send(messages.errorResponse(error));
+      response.send(
+        messages.errorResponse({
+          route: "/item/add",
+          message: "Sorry, Cannot Add Item",
+          details: params,
+          error: error,
+        })
+      );
     } else {
       response.send(
         messages.dataResponse({
+          route: "/item/add",
           message: "Successfully Added Item",
-          Details: params,
+          details: params,
+          data: data,
         })
       );
     }
@@ -49,12 +58,21 @@ exports.removeItem = (request, response) => {
   };
   docClient.delete(params, (error, data) => {
     if (error) {
-      response.send(messages.errorResponse(error));
+      response.send(
+        messages.errorResponse({
+          route: "/item/delete",
+          message: "Sorry, Cannot Delete Item",
+          details: params,
+          error: error,
+        })
+      );
     } else {
       response.send(
         messages.dataResponse({
-          message: "Successfully Deleted Item",
-          Details: params,
+          route: "/item/delete",
+          message: "Successfully Delete Item",
+          details: params,
+          data: data,
         })
       );
     }
@@ -71,9 +89,23 @@ exports.readItem = (request, response) => {
   };
   docClient.get(params, (error, data) => {
     if (error) {
-      response.send(messages.errorResponse(error));
+      response.send(
+        messages.errorResponse({
+          route: "/item/read",
+          message: "Sorry, Cannot Read Item",
+          details: params,
+          error: error,
+        })
+      );
     } else {
-      response.send(messages.dataResponse(data));
+      response.send(
+        messages.dataResponse({
+          route: "/item/read",
+          message: "Successfully Read Item",
+          details: params,
+          data: data,
+        })
+      );
     }
   });
 };
@@ -95,9 +127,23 @@ exports.updateItem = (request, response) => {
   };
   docClient.update(params, (error, data) => {
     if (error) {
-      response.send(messages.errorResponse(error));
+      response.send(
+        messages.errorResponse({
+          route: "/item/update",
+          message: "Sorry, Cannot Update Item",
+          details: params,
+          error: error,
+        })
+      );
     } else {
-      response.send(messages.dataResponse(data));
+      response.send(
+        messages.dataResponse({
+          route: "/item/update",
+          message: "Successfully Updated Item",
+          details: params,
+          data: data,
+        })
+      );
     }
   });
 };
@@ -116,9 +162,23 @@ exports.containsKey = (request, response) => {
   };
   docClient.scan(params, (error, data) => {
     if (error) {
-      response.send(messages.errorResponse(error));
+      response.send(
+        messages.errorResponse({
+          route: "/item/contains",
+          message: "Sorry, Cannot Scan Contains in Table",
+          details: params,
+          error: error,
+        })
+      );
     } else {
-      response.send(messages.dataResponse(data));
+      response.send(
+        messages.dataResponse({
+          route: "/item/contains",
+          message: "Successfully Scanned Contains in Table",
+          details: params,
+          data: data,
+        })
+      );
     }
   });
 };
@@ -138,9 +198,23 @@ exports.startsWith = (request, response) => {
   };
   docClient.query(params, (error, data) => {
     if (error) {
-      response.send(messages.errorResponse(error));
+      response.send(
+        messages.errorResponse({
+          route: "/item/starts",
+          message: "Sorry, Cannot Query Starts With",
+          details: params,
+          error: error,
+        })
+      );
     } else {
-      response.send(messages.dataResponse(data));
+      response.send(
+        messages.dataResponse({
+          route: "/item/starts",
+          message: "Successfully Queried Starts With",
+          details: params,
+          data: data,
+        })
+      );
     }
   });
 };
@@ -158,9 +232,23 @@ exports.equals = (request, response) => {
   };
   docClient.query(params, (error, data) => {
     if (error) {
-      response.send(messages.errorResponse(error));
+      response.send(
+        messages.errorResponse({
+          route: "/item/equals",
+          message: "Sorry, Cannot Query Equals",
+          details: params,
+          error: error,
+        })
+      );
     } else {
-      response.send(messages.dataResponse(data));
+      response.send(
+        messages.dataResponse({
+          route: "/item/equals",
+          message: "Successfully Queried Equals",
+          details: params,
+          data: data,
+        })
+      );
     }
   });
 };

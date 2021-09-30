@@ -3,10 +3,28 @@ const { Command } = require("commander");
 const program = new Command();
 const inquirer = require("inquirer");
 const { apiCall } = require("../constants/apiCalls");
-const { errorOutput } = require("../constants/messages");
 const Table = require("cli-table");
-const table = new Table();
+const table = new Table({
+  chars: {
+    top: "═",
+    "top-mid": "╤",
+    "top-left": "╔",
+    "top-right": "╗",
+    bottom: "═",
+    "bottom-mid": "╧",
+    "bottom-left": "╚",
+    "bottom-right": "╝",
+    left: "║",
+    "left-mid": "╟",
+    mid: "─",
+    "mid-mid": "┼",
+    right: "║",
+    "right-mid": "╢",
+    middle: "│",
+  },
+});
 const { inputData } = require("../constants/input");
+const colors = require("colors/safe");
 
 //version
 program.version("1.0.0");
@@ -104,9 +122,18 @@ program
   });
 
 //options
-program.option("-o, --output <format>", "Select output format JSON/TABLE");
-
-program.option("-D, --debug", "See the Responses in Debug Mode");
+program.option(
+  "-j, --json",
+  "See the Responses in JSON Format (Priority Level: Medium)"
+);
+program.option(
+  "-t, --table",
+  "See the Responses in Table Format (Priority Level: Low)"
+);
+program.option(
+  "-d, --debug",
+  "See the Responses in Debug Mode (Priority Level: Highest)"
+);
 
 program.parse(process.argv);
 
@@ -115,19 +142,69 @@ const options = program.opts();
 //Output Messages
 exports.successMessage = (response) => {
   if (options.debug) {
-    console.log(response);
+    console.log(colors.yellow(response));
+  } else if (options.json) {
+    console.log(colors.cyan(response.data));
+  } else if (options.table) {
+    const route = response.data.route;
+    switch (route) {
+      case "/item/read":
+        readOutput(response);
+        break;
+
+      case "/item/contains":
+        tableOutput(response);
+        break;
+
+      case "/item/equals":
+        tableOutput(response);
+        break;
+
+      case "/item/starts":
+        tableOutput(response);
+        break;
+
+      default:
+        console.log(colors.cyan(response.data));
+        break;
+    }
   } else {
-    console.log(response.data);
+    console.log(colors.green(`${response.data.message}.`));
   }
 };
 
 exports.errorMessage = (error) => {
   if (options.debug) {
-    console.log(error);
+    console.log(colors.red(error));
   } else {
-    console.log(error);
+    console.log(colors.red(`${error.code}`));
   }
 };
 
-//  table.push(response);
-// console.log(table.toString());
+function tableOutput(response) {
+  const contain = response.data.data;
+  table.push(["Title", "Year", "Rating", "Actors"]);
+  contain.Items.map((element) => {
+    table.push([
+      `${element.title} `,
+      `${element.year} `,
+      `${element.info.rating}`,
+      `${element.info.actors.join(", ")} `,
+    ]);
+  });
+  console.log(colors.magenta.bold(table.toString()));
+  console.log(
+    colors.rainbow(`Number of items matched query: ${contain.Count}`)
+  );
+}
+
+function readOutput(response) {
+  const read = response.data.data.Item;
+  table.push(
+    { Title: read.title },
+    { Year: read.year },
+    { Rating: read.info.rating },
+    { Actors: read.info.actors.join(", ") }
+  );
+  console.log(colors.magenta.bold(table.toString()));
+}

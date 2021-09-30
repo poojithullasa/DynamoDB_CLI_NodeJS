@@ -27,7 +27,7 @@ exports.inputData = [
   },
   {
     name: "string",
-    message: "Enter the value you want to query/scan (Eg: Hi)",
+    message: "Enter the value you want to query/scan (Eg: Iron)",
     type: "input",
   },
   {

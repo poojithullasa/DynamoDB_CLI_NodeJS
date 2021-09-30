@@ -186,7 +186,7 @@ exports.containsKey = (request, response) => {
 exports.startsWith = (request, response) => {
   const params = {
     TableName: "Movies",
-    ProjectionExpression: "#yr, title, info.genres, info.actors[0]",
+    ProjectionExpression: "#yr, title, info.genres, info.actors,info.rating",
     KeyConditionExpression: "#yr= :yyyy and begins_with(title, :string)",
     ExpressionAttributeNames: {
       "#yr": "year",

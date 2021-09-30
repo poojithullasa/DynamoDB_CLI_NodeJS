@@ -11,7 +11,7 @@
   "author": "Ullasa Poojith Sindhur",
   "license": "ISC",
   "bin": {
-    "dracarys": "./bin/index.js"
+    "imdb": "./bin/index.js"
   },
   "dependencies": {
     "aws-sdk": "^2.995.0",

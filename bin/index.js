@@ -144,7 +144,7 @@ exports.successMessage = (response) => {
   if (options.debug) {
     console.log(colors.yellow(response));
   } else if (options.json) {
-    console.log(colors.cyan(response.data));
+    jsonOutput(response);
   } else if (options.table) {
     const route = response.data.route;
     switch (route) {
@@ -165,7 +165,7 @@ exports.successMessage = (response) => {
         break;
 
       default:
-        console.log(colors.cyan(response.data));
+        jsonOutput(response);
         break;
     }
   } else {
@@ -177,7 +177,7 @@ exports.errorMessage = (error) => {
   if (options.debug) {
     console.log(colors.red(error));
   } else {
-    console.log(colors.red(`${error.code}`));
+    console.log(colors.red(error.config));
   }
 };
 
@@ -207,4 +207,26 @@ function readOutput(response) {
     { Actors: read.info.actors.join(", ") }
   );
   console.log(colors.magenta.bold(table.toString()));
+}
+
+function jsonOutput(response) {
+  if (response.data.route.includes("table")) {
+    if (response.data.message.includes("Sorry")) {
+      console.log(colors.red(response.data.error));
+    } else {
+      console.log(colors.cyan(response.data.details));
+    }
+  } else {
+    if (response.data.message.includes("Sorry")) {
+      console.log(colors.red(response.data));
+    } else if (response.data.route == "/item/read") {
+      console.log(colors.cyan(response.data.data.Item));
+    } else {
+      if (response.data.data.Items != undefined) {
+        console.log(colors.cyan(response.data.data.Items));
+      } else {
+        console.log(colors.cyan(response.data));
+      }
+    }
+  }
 }

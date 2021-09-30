@@ -220,7 +220,11 @@ function jsonOutput(response) {
     if (response.data.message.includes("Sorry")) {
       console.log(colors.red(response.data));
     } else if (response.data.route == "/item/read") {
-      console.log(colors.cyan(response.data.data.Item));
+      if (response.data.data.Item != undefined) {
+        console.log(colors.cyan(response.data.data.Item));
+      } else {
+        console.log(colors.red("Sorry, Data doesn't exists"));
+      }
     } else {
       if (response.data.data.Items != undefined) {
         console.log(colors.cyan(response.data.data.Items));

@@ -151,7 +151,6 @@ exports.updateItem = (request, response) => {
 exports.containsKey = (request, response) => {
   const params = {
     TableName: "Movies",
-    ProjectExpression: "#title",
     FilterExpression: "contains(#title, :string)",
     ExpressionAttributeNames: {
       "#title": "title",
@@ -186,7 +185,6 @@ exports.containsKey = (request, response) => {
 exports.startsWith = (request, response) => {
   const params = {
     TableName: "Movies",
-    ProjectionExpression: "#yr, title, info.genres, info.actors,info.rating",
     KeyConditionExpression: "#yr= :yyyy and begins_with(title, :string)",
     ExpressionAttributeNames: {
       "#yr": "year",
@@ -245,6 +243,35 @@ exports.equals = (request, response) => {
         messages.dataResponse({
           route: "/item/equals",
           message: "Successfully Queried Equals",
+          details: params,
+          data: data,
+        })
+      );
+    }
+  });
+};
+
+exports.filter = (request, response) => {
+  const params = {
+    TableName: "Movies",
+    FilterExpression: "contains(info.genres,:gen)",
+    ExpressionAttributeValues: { ":gen": request.params.genre },
+  };
+  docClient.scan(params, (error, data) => {
+    if (error) {
+      response.send(
+        messages.errorResponse({
+          route: "/item/filter",
+          message: "Sorry, Cannot Filter Items in Table",
+          details: params,
+          error: error,
+        })
+      );
+    } else {
+      response.send(
+        messages.dataResponse({
+          route: "/item/filter",
+          message: "Successfully Filtered Items in Table",
           details: params,
           data: data,
         })

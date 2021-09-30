@@ -35,4 +35,21 @@ exports.inputData = [
     message: "Enter the year you want to search(format: yyyy)",
     type: "number",
   },
+  {
+    name: "genre",
+    message: "Select the genre you want to search",
+    type: "checkbox",
+    choices: [
+      "Action",
+      "Sci-Fi",
+      "Comedy",
+      "Adventure",
+      "Thriller",
+      "Crime",
+      "Romance",
+      "Horror",
+      "Drama",
+      "Mystery",
+    ],
+  },
 ];

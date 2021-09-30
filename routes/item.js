@@ -12,5 +12,6 @@ router.patch(
 router.get("/contains/:string", itemController.containsKey);
 router.get("/starts/:string&:number", itemController.startsWith);
 router.get("/equals/:year", itemController.equals);
+router.get("/filter/:genre", itemController.filter);
 
 module.exports = router;

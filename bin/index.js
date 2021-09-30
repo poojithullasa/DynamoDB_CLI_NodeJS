@@ -101,12 +101,20 @@ program
     });
   });
 program
+  .command("filter")
+  .description("Get all movies in the table with given genre")
+  .action(() => {
+    inquirer.prompt(inputData.slice(7, 8)).then((answers) => {
+      apiCall("GET", `/item/filter/${answers.genre}`);
+    });
+  });
+program
   .command("starts")
   .description(
     "Check if there is any item starts with entered value in the table movies"
   )
   .action(() => {
-    inquirer.prompt(inputData.slice(5)).then((answers) => {
+    inquirer.prompt(inputData.slice(5, 7)).then((answers) => {
       apiCall("GET", `/item/starts/${answers.string}&${answers.number}`);
     });
   });
@@ -155,7 +163,9 @@ exports.successMessage = (response) => {
       case "/item/contains":
         tableOutput(response);
         break;
-
+      case "/item/filter":
+        tableOutput(response);
+        break;
       case "/item/equals":
         tableOutput(response);
         break;
@@ -169,7 +179,11 @@ exports.successMessage = (response) => {
         break;
     }
   } else {
-    console.log(colors.green(`${response.data.message}.`));
+    if (response.data.message.includes("Sorry")) {
+      console.log(colors.red(response.data.message));
+    } else {
+      console.log(colors.cyan(response.data.message));
+    }
   }
 };
 
@@ -189,7 +203,7 @@ function tableOutput(response) {
       `${element.title} `,
       `${element.year} `,
       `${element.info.rating}`,
-      `${element.info.actors.join(", ")} `,
+      `${element.info.actors} `,
     ]);
   });
   console.log(colors.magenta.bold(table.toString()));

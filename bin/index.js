@@ -55,6 +55,14 @@ program
     Validate.authFunction(secret);
     apiCall("POST", "/table/load");
   });
+program
+  .command("get-all")
+  .argument("<secret>", "Enter Secret Pin for authentication")
+  .description("Get all items in the table")
+  .action((secret) => {
+    Validate.authFunction(secret);
+    apiCall("GET", "/table/getall");
+  });
 
 //Item Commands
 program
@@ -103,7 +111,16 @@ program
       apiCall("DELETE", `/item/remove/${answers.year}&${answers.title}`);
     });
   });
-
+program
+  .command("remove-item")
+  .argument("<secret>", "Enter Secret Pin for authentication")
+  .description("Remove item in the table movies")
+  .action((secret) => {
+    Validate.authFunction(secret);
+    inquirer.prompt(inputData.slice(0, 2)).then((answers) => {
+      apiCall("DELETE", `/item/remove/${answers.year}&${answers.title}`);
+    });
+  });
 //Additional Query Commands
 program
   .command("contains")
@@ -189,11 +206,11 @@ exports.successMessage = (response) => {
       case "/item/equals":
         tableOutput(response);
         break;
-
       case "/item/starts":
         tableOutput(response);
         break;
-
+      case "/table/getall":
+        getAll(response);
       default:
         jsonOutput(response);
         break;
@@ -228,6 +245,19 @@ function tableOutput(response) {
   );
 }
 
+function getAll(response) {
+  const contain = response.data.data;
+  table.push(["Title", "Year"]);
+  contain.Items.map((element) => {
+    table.push([`${element.title.S} `, `${element.year.N} `]);
+  });
+  console.log(colors.magenta.bold(table.toString()));
+  console.log(
+    colors.rainbow(`Number of items matched query: ${contain.Count}`)
+  );
+  process.exit(0);
+}
+
 function readOutput(response) {
   const read = response.data.data.Item;
   if (read == undefined) {
@@ -236,7 +266,7 @@ function readOutput(response) {
     table.push(
       { Title: read.title },
       { Year: read.year },
-      { Rating: read.info.rating },
+      { Rating: read.info.M.rating.N },
       { Plot: read.info.plot }
     );
     console.log(colors.magenta.bold(table.toString()));
@@ -247,6 +277,8 @@ function jsonOutput(response) {
   if (response.data.route.includes("table")) {
     if (response.data.message.includes("Sorry")) {
       console.log(colors.red(response.data.error));
+    } else if (response.data.route == "/table/getall") {
+      console.log(colors.cyan(response.data.data));
     } else {
       console.log(colors.cyan(response.data.details));
     }

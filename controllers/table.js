@@ -110,3 +110,31 @@ exports.loadTable = (request, response) => {
     })
   );
 };
+
+exports.getAll = (request, response) => {
+  const params = {
+    TableName: "Movies",
+    Select: "ALL_ATTRIBUTES",
+  };
+  dynamodb.scan(params, (error, data) => {
+    if (error) {
+      response.send(
+        messages.errorResponse({
+          route: "/table/getall",
+          message: "Sorry, Cannot get all Items in the Table",
+          details: params,
+          error: error,
+        })
+      );
+    } else {
+      response.send(
+        messages.dataResponse({
+          route: "/table/getall",
+          message: "Successfully got all Items in the Table",
+          details: params,
+          data: data,
+        })
+      );
+    }
+  });
+};

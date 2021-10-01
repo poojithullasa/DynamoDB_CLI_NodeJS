@@ -25,6 +25,7 @@ const table = new Table({
 });
 const { inputData } = require("../constants/input");
 const colors = require("colors/safe");
+const Validate = require("../constants/auth");
 
 //version
 program.version("1.0.0");
@@ -32,28 +33,36 @@ program.version("1.0.0");
 //Table commands
 program
   .command("create-table")
+  .argument("<secret>", "Enter Secret Pin for authentication")
   .description("Create a new Movies Table")
-  .action(() => {
+  .action((secret) => {
+    Validate.authFunction(secret);
     apiCall("POST", "/table/create");
   });
 program
   .command("delete-table")
+  .argument("<secret>", "Enter Secret Pin for authentication")
   .description("Delete Movies table")
-  .action(() => {
+  .action((secret) => {
+    Validate.authFunction(secret);
     apiCall("DELETE", "/table/delete");
   });
 program
   .command("load-table")
+  .argument("<secret>", "Enter Secret Pin for authentication")
   .description("load Movies table with default data")
-  .action(() => {
+  .action((secret) => {
+    Validate.authFunction(secret);
     apiCall("POST", "/table/load");
   });
 
 //Item Commands
 program
   .command("add-item")
+  .argument("<secret>", "Enter Secret Pin for authentication")
   .description("Add item to the table movies")
-  .action(() => {
+  .action((secret) => {
+    Validate.authFunction(secret);
     inquirer.prompt(inputData.slice(0, 4)).then((answers) => {
       apiCall(
         "POST",
@@ -63,16 +72,20 @@ program
   });
 program
   .command("read-item")
+  .argument("<secret>", "Enter Secret Pin for authentication")
   .description("Read item from the table movies")
-  .action(() => {
+  .action((secret) => {
+    Validate.authFunction(secret);
     inquirer.prompt(inputData.slice(0, 2)).then((answers) => {
       apiCall("GET", `/item/read/${answers.year}&${answers.title}`);
     });
   });
 program
   .command("update-item")
+  .argument("<secret>", "Enter Secret Pin for authentication")
   .description("Update existing item in the table movies")
-  .action(() => {
+  .action((secret) => {
+    Validate.authFunction(secret);
     inquirer.prompt(inputData.slice(0, 5)).then((answers) => {
       apiCall(
         "PATCH",
@@ -82,8 +95,10 @@ program
   });
 program
   .command("remove-item")
+  .argument("<secret>", "Enter Secret Pin for authentication")
   .description("Remove item in the table movies")
-  .action(() => {
+  .action((secret) => {
+    Validate.authFunction(secret);
     inquirer.prompt(inputData.slice(0, 2)).then((answers) => {
       apiCall("DELETE", `/item/remove/${answers.year}&${answers.title}`);
     });
@@ -92,38 +107,46 @@ program
 //Additional Query Commands
 program
   .command("contains")
+  .argument("<secret>", "Enter Secret Pin for authentication")
   .description(
     "Check if there is any item contains entered value in the table movies"
   )
-  .action(() => {
+  .action((secret) => {
+    Validate.authFunction(secret);
     inquirer.prompt(inputData.slice(5, 6)).then((answers) => {
       apiCall("GET", `/item/contains/${answers.string}`);
     });
   });
 program
   .command("filter")
+  .argument("<secret>", "Enter Secret Pin for authentication")
   .description("Get all movies in the table with given genre")
-  .action(() => {
+  .action((secret) => {
+    Validate.authFunction(secret);
     inquirer.prompt(inputData.slice(7, 8)).then((answers) => {
       apiCall("GET", `/item/filter/${answers.genre}`);
     });
   });
 program
   .command("starts")
+  .argument("<secret>", "Enter Secret Pin for authentication")
   .description(
     "Check if there is any item starts with entered value in the table movies"
   )
-  .action(() => {
+  .action((secret) => {
+    Validate.authFunction(secret);
     inquirer.prompt(inputData.slice(5, 7)).then((answers) => {
       apiCall("GET", `/item/starts/${answers.string}&${answers.number}`);
     });
   });
 program
   .command("equals")
+  .argument("<secret>", "Enter Secret Pin for authentication")
   .description(
     "Check if there is any item equals entered value in the table movies"
   )
-  .action(() => {
+  .action((secret) => {
+    Validate.authFunction(secret);
     inquirer.prompt(inputData.slice(0, 1)).then((answers) => {
       apiCall("GET", `/item/equals/${answers.year}`);
     });

@@ -142,29 +142,29 @@ program
 program
   .command("equals")
   .argument("<secret>", "Enter Secret Pin for authentication")
+  .option("-y, --year [year]", "Enter the year you want to search")
   .description(
     "Check if there is any item equals entered value in the table movies"
   )
-  .action((secret) => {
+  .action((secret, options) => {
     Validate.authFunction(secret);
-    inquirer.prompt(inputData.slice(0, 1)).then((answers) => {
-      apiCall("GET", `/item/equals/${answers.year}`);
-    });
+    if (options.year) {
+      apiCall("GET", `/item/equals/${options.year}`);
+    } else {
+      inquirer.prompt(inputData.slice(0, 1)).then((answers) => {
+        apiCall("GET", `/item/equals/${answers.year}`);
+      });
+    }
   });
 
 //options
 program.option(
-  "-j, --json",
-  "See the Responses in JSON Format (Priority Level: Medium)"
+  "-f, --format [format]",
+  "See the Responses in JSON/TABLE Format",
+  "json"
 );
-program.option(
-  "-t, --table",
-  "See the Responses in Table Format (Priority Level: Low)"
-);
-program.option(
-  "-d, --debug",
-  "See the Responses in Debug Mode (Priority Level: Highest)"
-);
+
+program.option("-d, --debug", "See the Responses in Debug Mode");
 
 program.parse(process.argv);
 
@@ -174,15 +174,12 @@ const options = program.opts();
 exports.successMessage = (response) => {
   if (options.debug) {
     console.log(colors.yellow(response));
-  } else if (options.json) {
-    jsonOutput(response);
-  } else if (options.table) {
+  } else if (options.format.toLowerCase() == "table") {
     const route = response.data.route;
     switch (route) {
       case "/item/read":
         readOutput(response);
         break;
-
       case "/item/contains":
         tableOutput(response);
         break;
@@ -202,11 +199,7 @@ exports.successMessage = (response) => {
         break;
     }
   } else {
-    if (response.data.message.includes("Sorry")) {
-      console.log(colors.red(response.data.message));
-    } else {
-      console.log(colors.cyan(response.data.message));
-    }
+    jsonOutput(response);
   }
 };
 
@@ -237,13 +230,17 @@ function tableOutput(response) {
 
 function readOutput(response) {
   const read = response.data.data.Item;
-  table.push(
-    { Title: read.title },
-    { Year: read.year },
-    { Rating: read.info.rating },
-    { Actors: read.info.actors.join(", ") }
-  );
-  console.log(colors.magenta.bold(table.toString()));
+  if (read == undefined) {
+    console.log(colors.red("Item doesn't exists"));
+  } else {
+    table.push(
+      { Title: read.title },
+      { Year: read.year },
+      { Rating: read.info.rating },
+      { Plot: read.info.plot }
+    );
+    console.log(colors.magenta.bold(table.toString()));
+  }
 }
 
 function jsonOutput(response) {

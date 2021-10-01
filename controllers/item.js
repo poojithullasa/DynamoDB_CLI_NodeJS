@@ -16,6 +16,7 @@ const year = 2015;
 exports.addItem = (request, response) => {
   const params = {
     TableName: table,
+    ConditionExpression: "attribute_not_exists(title)",
     Item: {
       year: Number(request.params.year),
       title: request.params.title,
@@ -27,14 +28,25 @@ exports.addItem = (request, response) => {
   };
   docClient.put(params, (error, data) => {
     if (error) {
-      response.send(
-        messages.errorResponse({
-          route: "/item/add",
-          message: "Sorry, Cannot Add Item",
-          details: params,
-          error: error,
-        })
-      );
+      if (error.code === "ConditionalCheckFailedException") {
+        response.send(
+          messages.errorResponse({
+            route: "/item/add",
+            message: "Sorry, Item Already Exists",
+            details: params,
+            error: error,
+          })
+        );
+      } else {
+        response.send(
+          messages.errorResponse({
+            route: "/item/add",
+            message: "Sorry, Cannot Add Item",
+            details: params,
+            error: error,
+          })
+        );
+      }
     } else {
       response.send(
         messages.dataResponse({

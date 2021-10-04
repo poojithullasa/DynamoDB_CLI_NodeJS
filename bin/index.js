@@ -266,7 +266,7 @@ function readOutput(response) {
     table.push(
       { Title: read.title },
       { Year: read.year },
-      { Rating: read.info.M.rating.N },
+      { Rating: read.info.rating },
       { Plot: read.info.plot }
     );
     console.log(colors.magenta.bold(table.toString()));

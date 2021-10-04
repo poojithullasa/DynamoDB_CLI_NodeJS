@@ -11,4 +11,4 @@ app.get("/", (reqest, response) => {
   response.send("Welcome to dracarys cli. A tool to manage library books.");
 });
 
-app.listen(5000);
+module.exports = app;

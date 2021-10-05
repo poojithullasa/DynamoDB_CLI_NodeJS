@@ -23,6 +23,7 @@
     "inquirer": "^8.1.5"
   },
   "devDependencies": {
+    "axios-mock-adapter": "^1.20.0",
     "jest": "^27.2.4",
     "supertest": "^6.1.6"
   }

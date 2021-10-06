@@ -21,6 +21,29 @@ describe("POST /table/create", () => {
   });
 });
 
+describe("GET /table/getall", () => {
+  mock
+    .onGet("/table/getall")
+    .replyOnce(204)
+    .onGet("/table/getall")
+    .replyOnce(200, { message: "Success" });
+  test("is Getall api is throwing 204 status code?", async () => {
+    const response = await axios({
+      method: "GET",
+      url: "/table/getall",
+    });
+    expect(response.status).toBe(204);
+  });
+  test("is Getall api is sending success message?", async () => {
+    const response = await axios({
+      method: "GET",
+      url: "/table/getall",
+    });
+    // const res = JSON.parse(response.);
+    expect(response.data.message).toBe("Success");
+  });
+});
+
 describe("DELETE /table/delete", () => {
   mock
     .onDelete("/table/delete")
@@ -50,28 +73,5 @@ describe("DELETE /table/delete", () => {
       url: "/table/delete",
     });
     expect(response.status).toBe(204);
-  });
-});
-
-describe("GET /table/getall", () => {
-  mock
-    .onGet("/table/getall")
-    .replyOnce(204)
-    .onGet("/table/getall")
-    .replyOnce(200, { message: "Success" });
-  test("is Getall api is throwing 204 status code?", async () => {
-    const response = await axios({
-      method: "GET",
-      url: "/table/getall",
-    });
-    expect(response.status).toBe(204);
-  });
-  test("is Getall api is sending success message?", async () => {
-    const response = await axios({
-      method: "GET",
-      url: "/table/getall",
-    });
-    // const res = JSON.parse(response.);
-    expect(response.data.message).toBe("Success");
   });
 });

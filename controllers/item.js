@@ -10,9 +10,6 @@ const docClient = new AWS.DynamoDB.DocumentClient();
 
 const table = "Movies";
 
-const title = "The Big New Movie";
-const year = 2015;
-
 exports.addItem = (request, response) => {
   const params = {
     TableName: table,

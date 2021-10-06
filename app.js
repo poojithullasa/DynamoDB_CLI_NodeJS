@@ -8,7 +8,7 @@ app.use("/table", tableRoutes);
 app.use("/item", itemRoutes);
 
 app.get("/", (reqest, response) => {
-  response.send("Welcome to dracarys cli. A tool to manage library books.");
+  response.send("Welcome to IMDB cli. A tool to know about movies.");
 });
 
 module.exports = app;

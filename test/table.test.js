@@ -1,12 +1,5 @@
 const request = require("supertest");
 const app = require("../app");
-const axios = require("axios");
-const MockAdapter = require("axios-mock-adapter");
-const mock = new MockAdapter(axios);
-
-afterAll(async () => {
-  await request(app).delete("/table/delete");
-});
 
 describe("POST /table/create", () => {
   test("Is it successfully creating a table?", async () => {
@@ -21,57 +14,36 @@ describe("POST /table/create", () => {
   });
 });
 
-describe("GET /table/getall", () => {
-  mock
-    .onGet("/table/getall")
-    .replyOnce(204)
-    .onGet("/table/getall")
-    .replyOnce(200, { message: "Success" });
-  test("is Getall api is throwing 204 status code?", async () => {
-    const response = await axios({
-      method: "GET",
-      url: "/table/getall",
-    });
-    expect(response.status).toBe(204);
-  });
-  test("is Getall api is sending success message?", async () => {
-    const response = await axios({
-      method: "GET",
-      url: "/table/getall",
-    });
-    // const res = JSON.parse(response.);
-    expect(response.data.message).toBe("Success");
+describe("POST /table/load", () => {
+  test("is application able to load data if successfully created?", async () => {
+    const response = await request(app).post("/table/load");
+    const res = JSON.parse(response.text);
+    expect(res.message).toBe("Successfully Loaded Table with Sample Data");
   });
 });
 
-describe("DELETE /table/delete", () => {
-  mock
-    .onDelete("/table/delete")
-    .replyOnce(200, { message: "Sorry, Cannot Delete Table" })
-    .onDelete("/table/delete")
-    .replyOnce(200, { message: "Successfully Deleted Table" })
-    .onDelete("/table/delete")
-    .replyOnce(204);
+describe("Success Cases", () => {
+  test("Are we getting all items from the table?", async () => {
+    const response = await request(app).get("/table/getall");
+    const res = JSON.parse(response.text);
+    expect(res.message).toBe("Successfully got all Items in the Table");
+  });
+  test("Are we able to delete table?", async () => {
+    const response = await request(app).delete("/table/delete");
+    const res = JSON.parse(response.text);
+    expect(res.message).toBe("Successfully Deleted Table");
+  });
+});
 
+describe("Error Cases", () => {
+  test("Did we get error if items are not present?", async () => {
+    const response = await request(app).get("/table/getall");
+    const res = JSON.parse(response.text);
+    expect(res.message).toBe("Sorry, Cannot get all Items in the Table");
+  });
   test("Is it throwing error if table is not present?", async () => {
-    const response = await axios({
-      method: "DELETE",
-      url: "/table/delete",
-    });
-    expect(response.data.message).toBe("Sorry, Cannot Delete Table");
-  });
-  test("Is it successfully deleting table?", async () => {
-    const response = await axios({
-      method: "DELETE",
-      url: "/table/delete",
-    });
-    expect(response.data.message).toBe("Successfully Deleted Table");
-  });
-  test("Is it handling 404 error?", async () => {
-    const response = await axios({
-      method: "DELETE",
-      url: "/table/delete",
-    });
-    expect(response.status).toBe(204);
+    const response = await request(app).delete("/table/delete");
+    const res = JSON.parse(response.text);
+    expect(res.message).toBe("Sorry, Cannot Delete Table");
   });
 });
